@@ -1,5 +1,5 @@
 package TG.Pages;
 
-public class abc {
+public class TGG {
 
 }
