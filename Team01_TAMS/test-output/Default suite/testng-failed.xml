@@ -3,12 +3,14 @@
 <suite name="Failed suite [Default suite]" guice-stage="DEVELOPMENT">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="Admin.Testcases.LoginTest">
+      <class name="TG.Testcases.UngTuyenTGTest">
         <methods>
-          <include name="testLogin"/>
+          <include name="TC05_LowerScoresNK"/>
+          <include name="tearDown"/>
           <include name="setup"/>
+          <include name="TC06_applyTeachingAssistant_success_NK"/>
         </methods>
-      </class> <!-- Admin.Testcases.LoginTest -->
+      </class> <!-- TG.Testcases.UngTuyenTGTest -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->
