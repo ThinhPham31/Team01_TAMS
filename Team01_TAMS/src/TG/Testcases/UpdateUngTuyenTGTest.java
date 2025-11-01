@@ -7,8 +7,8 @@ import org.testng.annotations.*;
 import TG.Pages.UngTuyenTGPage;
 import TG.Pages.LoginTGPage;
 
-public class UngTuyenTGTest {
-    private WebDriver driver;
+public class UpdateUngTuyenTGTest {
+	private WebDriver driver;
     private UngTuyenTGPage page;
     private String filePath;
     private LoginTGPage login;
@@ -43,10 +43,12 @@ public class UngTuyenTGTest {
     // ✅ TC02 – Thiếu thông tin bắt buộc
     @Test(priority = 1)
     public void TC02_missingRequiredFields() throws InterruptedException {
-    	page.openApplyFormNDB();
+    	page.updateApplyFormNDB();
+    	page.clearAllFields();
     	page.clickSave();
         Thread.sleep(1000);
         Assert.assertTrue(page.hasErrorMessage("Vui lòng không bỏ trống Điểm TB tích lũy.","Vui lòng không bỏ trống Điểm rèn luyện.","Vui lòng không bỏ trống Điểm tổng kết môn.","Vui lòng không bỏ trống Hình ảnh minh chứng."), "Không hiển thị lỗi thiếu trường bắt buộc");
+        
     }
 
     // ✅ TC03 – Nhập ký tự không phải số
@@ -56,6 +58,7 @@ public class UngTuyenTGTest {
         page.fillForm("abc", "xyz", "ghi", null);
         page.clickSave();
         Assert.assertTrue(page.hasErrorMessage("Vui lòng không bỏ trống Điểm TB tích lũy.","Vui lòng không bỏ trống Điểm rèn luyện.","Vui lòng không bỏ trống Điểm tổng kết môn.","Vui lòng không bỏ trống Hình ảnh minh chứng."), "Cho phép nhập chữ");
+        
     }
 
     // ✅ TC04 – Điểm trung bình < 7 , Điểm rèn luyện < 65 , Điểm tổng kết < 7 ngành đặc biệt
@@ -65,6 +68,7 @@ public class UngTuyenTGTest {
         page.fillForm("6.0", "60", "6.9", null);
         page.clickSave();
         Assert.assertTrue(page.hasErrorMessage("Điểm TB tích lũy phải đạt từ 7.0 - 10.0 điểm","Điểm rèn luyện phải đạt từ 65 - 100 điểm","Điểm TK phải đạt từ 7.0 - 10.0 điểm","Vui lòng không bỏ trống Hình ảnh minh chứng."), "Không hiển thị lỗi ");
+        
     }
 
     // ✅ TC05 – Điểm trung bình < 7 , Điểm rèn luyện < 65 , Điểm tổng kết < 8 ngành khác
@@ -72,7 +76,8 @@ public class UngTuyenTGTest {
     public void TC05_LowerScoresNK() throws InterruptedException {
     	// Giả lập ngành khác bằng điểm 7.9
         page.openApplyFormNK();
-        page.fillForm("6.0", "60", "7.9", null);
+        filePath = "D:\\PLT.png";
+        page.fillForm("6.0", "60", "7.9", filePath);
         page.clickSave();
         Assert.assertTrue(page.hasErrorMessage("Điểm TB tích lũy phải đạt từ 7.0 - 10.0 điểm","Điểm rèn luyện phải đạt từ 65 - 100 điểm","Điểm TK phải đạt từ 8.0 - 10.0 điểm","Vui lòng không bỏ trống Hình ảnh minh chứng."), "Không hiển thị lỗi");
     }
@@ -80,7 +85,7 @@ public class UngTuyenTGTest {
     // ✅ TC06 – Lưu thông tin thành công ngành khác
     @Test(priority = 6)
     public void TC06_applyTeachingAssistant_success_NK() throws InterruptedException {
-    	page.clearScores();
+    	page.clearAllFields();
     	filePath = "D:\\PLT.png";
         page.fillForm("7.0", "65", "8", filePath);
         page.clickSave();

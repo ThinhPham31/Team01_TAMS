@@ -24,6 +24,8 @@ public class UngTuyenTGPage {
     private By ListNganh = By.xpath("/html/body/div[2]/main/section/div[2]/div/div/div[1]/div/div[2]/select");
     private By ChonNganhDB = By.xpath("/html/body/div[2]/main/section/div[2]/div/div/div[1]/div/div[2]/select/option[2]");
     private By ChonNganhKhac = By.xpath("");
+    private By UpdateButton = By.xpath("/html/body/div[2]/main/section/div[2]/div/div/div[2]/div[2]/div/div/div[2]/div/table/tbody/tr[1]/td[6]/span/a");
+    private By DeletePhotoButton = By.xpath("/html/body/div[2]/main/div[2]/div/div/div[2]/div/div[10]/div/div/div/a/i");
 
     public UngTuyenTGPage(WebDriver driver) {
         this.driver = driver;
@@ -52,6 +54,28 @@ public class UngTuyenTGPage {
         Thread.sleep(1000);
     }
 
+    public void updateApplyFormNDB() throws InterruptedException {
+    	driver.findElement(TroGiangButton).click();
+    	driver.findElement(DangKyButton).click();
+    	Thread.sleep(2000);
+    	driver.findElement(ListNganh).click();
+    	driver.findElement(ChonNganhDB).click();
+    	Thread.sleep(500);
+        driver.findElement(UpdateButton).click();
+        Thread.sleep(1000);
+    }
+    
+    public void updateApplyFormNK() throws InterruptedException {
+    	driver.findElement(TroGiangButton).click();
+    	driver.findElement(DangKyButton).click();
+    	Thread.sleep(2000);
+    	driver.findElement(ListNganh).click();
+    	driver.findElement(ChonNganhKhac).click();
+    	Thread.sleep(500);
+        driver.findElement(UpdateButton).click();
+        Thread.sleep(1000);
+    }
+    
     public void fillForm(String avg, String conduct, String finalScore, String filePath) {
         if (avg != null) driver.findElement(avgScoreField).sendKeys(avg);
         if (conduct != null) driver.findElement(conductScoreField).sendKeys(conduct);
@@ -92,6 +116,13 @@ public class UngTuyenTGPage {
     }
 
     public void clearAllFields() {
+        driver.findElement(avgScoreField).clear();
+        driver.findElement(conductScoreField).clear();
+        driver.findElement(finalScoreField).clear();
+        driver.findElement(DeletePhotoButton).click();
+    }
+    
+    public void clearScores() {
         driver.findElement(avgScoreField).clear();
         driver.findElement(conductScoreField).clear();
         driver.findElement(finalScoreField).clear();
