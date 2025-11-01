@@ -5,7 +5,6 @@ import org.openqa.selenium.support.ui.*;
 
 public class UngTuyenTGPage {
     private WebDriver driver;
-    private WebDriverWait wait;
 
     // ==== Locators ====
     private By applyButton = By.xpath("/html/body/div[2]/main/section/div[2]/div/div/div[2]/div[2]/div/div/div[2]/div/table/tbody/tr[1]/td[6]/span/a");
@@ -22,10 +21,15 @@ public class UngTuyenTGPage {
     private By TroGiangButton = By.xpath("//*[@id=\"parent-trogiang\"]");
     private By DangKyButton = By.xpath("//*[@id=\"child-trogiang-apply\"]");
     private By ListNganh = By.xpath("/html/body/div[2]/main/section/div[2]/div/div/div[1]/div/div[2]/select");
-    private By ChonNganhDB = By.xpath("/html/body/div[2]/main/section/div[2]/div/div/div[1]/div/div[2]/select/option[2]");
+    private By ChonNganhDB = By.xpath("/html/body/div[2]/main/section/div[2]/div/div/div[1]/div/div[2]/select/option[1]");
     private By ChonNganhKhac = By.xpath("");
     private By UpdateButton = By.xpath("/html/body/div[2]/main/section/div[2]/div/div/div[2]/div[2]/div/div/div[2]/div/table/tbody/tr[1]/td[6]/span/a");
     private By DeletePhotoButton = By.xpath("/html/body/div[2]/main/div[2]/div/div/div[2]/div/div[10]/div/div/div/a/i");
+    private By HuyDangKyButton = By.id("btnHuydangky");
+    private By KhongHuyButton = By.xpath("/html/body/div[7]/div/div[6]/button[3]");
+    private By HuyNgayButton = By.xpath("/html/body/div[8]/div/div[6]/button[1]");
+    private By DongButton = By.id("btnClose");
+    private By CancelsuccessMessage = By.id("swal2-title");
 
     public UngTuyenTGPage(WebDriver driver) {
         this.driver = driver;
@@ -126,5 +130,34 @@ public class UngTuyenTGPage {
         driver.findElement(avgScoreField).clear();
         driver.findElement(conductScoreField).clear();
         driver.findElement(finalScoreField).clear();
+    }
+    
+    public void CancelbutNo() {
+    	driver.findElement(HuyDangKyButton).click();
+    	driver.findElement(KhongHuyButton).click();
+    }
+    
+    public void CloseForm() {
+    	driver.findElement(DongButton).click();
+    }
+    
+    public void CancelbutYes() throws InterruptedException {
+    	driver.findElement(HuyDangKyButton).click();
+    	Thread.sleep(300);
+    	driver.findElement(HuyNgayButton).click();
+    }
+    
+    public void CancelSuccessMessageDisplayed() throws InterruptedException {
+    	Thread.sleep(500);
+    	if (driver.findElement(CancelsuccessMessage).isDisplayed()) {
+    		System.out.println("Huỷ Ứng Tuyển Thành Công được hiển thị");
+    	} else {
+    		System.out.println("Huỷ Ứng Tuyển Thành Công không được hiển thị");
+    	}
+        //return wait.until(ExpectedConditions.visibilityOfElementLocated(successMessage)).isDisplayed();
+    }
+    
+    public void ReUpdate() {
+    	driver.findElement(UpdateButton).click();
     }
 }
