@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suite name="Team01_TAMS_Suite">
+
+    <!-- Tham số global -->
+    <parameter name="browserName" value="chrome"/>
+    <parameter name="appURL" value="https://cntttest.vanlanguni.edu.vn:18081/Ta2025/"/>
+
+    <test name="Team01_TAMS_Tests">
+        <packages>
+            <package name="Admin.Testcases"/>
+            <package name="General.Testcases"/>
+        </packages>
+    </test>
+
+</suite>
