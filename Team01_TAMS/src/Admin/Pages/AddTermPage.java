@@ -38,7 +38,7 @@ public class AddTermPage {
     private final By saveButtonLocator = By.xpath("//*[@id=\"btnSubmit\"]");
     private final By cancelButtonLocator = By.xpath("//*[@id=\"btnClose\"]");
     
-    
+    private By successfulMessageLocator = By.xpath("//*[@id=\"swal2-title\"]");
     
 	//Khởi tạo class khi được gọi và truyền driver vào để các thành phần trong class này đọc
 	public AddTermPage(WebDriver driver) {
