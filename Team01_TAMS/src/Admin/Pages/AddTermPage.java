@@ -151,6 +151,30 @@ public class AddTermPage {
         // Gõ thêm 1 ký tự giống hành vi người dùng
         termInput.sendKeys(extraChar);
     }
+    
+    public void fillDataTerm(String startYear, String appendChar, String startDate) {
+        // Chọn năm bắt đầu
+        selectStartYear(startYear);
+
+        // Thêm ký tự vào cuối tên học kỳ
+        appendTermName(appendChar);
+
+        // Chọn ngày bắt đầu
+        selectStartDate(startDate);
+    }
+
+    
+    // Message 
+	public String getSuccessfulMessage() {
+		String successfulText = "";
+		
+		WebElement element = driver.findElement(successfulMessageLocator);
+		if (element.isDisplayed()) {
+			successfulText = element.getText();
+		}
+		
+		return successfulText;
+	}
 	
 	//Clear all input data
 	public void resetInputData() {

@@ -79,15 +79,9 @@ public class AddTermTC extends InitiationTest {
 	@Test (priority = 1)
 	public void TC01_SaveTermSuccessfulWithLB() throws InterruptedException {
 		
-		// Chọn năm bắt đầu 
-	    addtermPage.selectStartYear("2028");
-
-	    // Thêm 1 ký tự vào cuối value học kỳ
-	    addtermPage.appendTermName("2");
+	    // Gọi hàm fillDataTerm
+	    addtermPage.fillDataTerm("2028", "2", "2028-02-22");
 	    
-	    // Chọn ngày bắt đầu 
-	    addtermPage.selectStartDate("2028-02-22");
-
 	    addtermPage.clickLuuThongTin();
 	}
 
