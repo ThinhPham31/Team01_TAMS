@@ -46,7 +46,7 @@ public class LoginTGPage {
         driver.findElement(passwordField).sendKeys(password);
         Thread.sleep(1000);
         driver.findElement(signInButton).click();
-        Thread.sleep(10000);
+        Thread.sleep(12000);
     }
 
     public void clickKeepMeSignIn() throws InterruptedException {

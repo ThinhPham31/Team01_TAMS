@@ -45,11 +45,17 @@ public class UpdateUngTuyenTGTest {
     // ✅ TC01 – Lưu thông tin thành công ngành đặc biệt
     @Test(priority = 4)
     public void TC01_applyTeachingAssistant_success_NDB() throws InterruptedException {
-        page.clearScores();
-    	filePath = "D:\\PLT.png";
+    	// Xoá trường điểm Trung Bình, Điểm Rèn Luyện, Điểm Tổng Kết
+    	page.clearScores();
+    	// Đường dẫn tới PLT.png trong project
+        String projectDir = System.getProperty("user.dir");
+        String filePath = projectDir + "\\resources\\PLT.png";
+        // Điền các trường Điểm Trung Bình = 8.0 , Điểm rèn luyện = 80 , Điểm Tổng Kết = 9.0 , Đính kèm hình ảnh minh chứng
         page.fillForm("8.0", "80", "9.0", filePath);
+        // nhấn chọn Lưu thông tin
         page.clickSave();
         Thread.sleep(1000);
+        // Kiểm tra nếu thông báo lưu thông tin thành công hiển thị
         page.isSuccessMessageDisplayed();
         Thread.sleep(3000);
     }

@@ -38,7 +38,7 @@ public class TKUngTuyenTest {
         page = new XemUngTuyenTGPage(driver);
         
     }
-    // ✅ TC01 – Hệ thống cho phép lọc Học kì 251 ngành CNTT và tìm kiếm Mã LHP "251_71ITBS10103_0201"
+    // ✅ TC01 – Hệ thống cho phép lọc Học kì 251 ngành CNTT TH101 và tìm kiếm Mã LHP "251_71ITBS10103_01"
     //Mục đích: Kiểm tra rằng hệ thống tìm kiếm mã LHP có chính xác không
     @Test(priority = 1)
     public void TC01_search_01() throws InterruptedException {
@@ -48,16 +48,16 @@ public class TKUngTuyenTest {
     	page.ClickKQDangKy();
     	// Mở Dropdown list học kỳ chọn học kỳ 251
     	page.chonHK251();
-    	// Mở Dropdown list Ngành chọn ngành Công Nghệ Thông Tin
-    	page.chonNganhCNTT();
-    	// Nhập dữ liệu tìm kiếm Mã LHP : "251_71ITBS10103_0201"
-    	page.fill("251_71ITBS10103_0201");
-    	// Kiểm tra hệ thống có hiển thị kết quả không và có đúng với Mã LHP "251_71ITBS10103_0201"
+    	// Mở Dropdown list Ngành chọn ngành Công Nghệ Thông Tin TH101
+    	page.chonNganh101();
+    	// Nhập dữ liệu tìm kiếm Mã LHP : "251_71ITBS10103_01"
+    	page.fill("251_71ITBS10103_01");
+    	// Kiểm tra hệ thống có hiển thị kết quả không và có đúng với Mã LHP "251_71ITBS10103_01"
     	page.checkMLHP();
     	Thread.sleep(2000);
     } 
     
-    // ✅ TC02 - Hệ thống cho phép lọc Học kì 251 ngành CNTT và tìm kiếm  "xyz"
+    // ✅ TC02 - Hệ thống cho phép lọc Học kì 251 ngành CNTT TH101 và tìm kiếm  "xyz"
     // Mục Đích: Kiểm tra rằng hệ thống thông báo "Không Tìm Thấy dữ liệu nào"
     @Test(priority = 2)
     public void TC02_search_02() throws InterruptedException {
@@ -65,15 +65,15 @@ public class TKUngTuyenTest {
     	page.ClickKQDangKy();
     	// Mở Dropdown list học kỳ chọn học kỳ 251
     	page.chonHK251();
-    	// Mở Dropdown list Ngành chọn ngành Công Nghệ Thông Tin
-    	page.chonNganhCNTT();
+    	// Mở Dropdown list Ngành chọn ngành Công Nghệ Thông Tin TH101
+    	page.chonNganh101();
     	// Nhập dữ liệu tìm kiếm : "xyz"
     	page.fill("xyz");
     	// Kiểm tra hệ thống có hiển thị "Không Tìm thấy dữ liệu nào"
     	page.checkSearchNoData();
     	Thread.sleep(2000);
     } 
-    // ✅ TC03 - Hệ thống cho phép lọc HK251 ngành CNTT và tìm kiếm Tên HP "Nhập môn công nghệ thông tin"
+    // ✅ TC03 - Hệ thống cho phép lọc HK251 ngành CNTT TH101 và tìm kiếm Tên HP "Nhập môn công nghệ thông tin"
     // Mục Đích: Kiểm tra rằng hệ thống tìm kiếm Tên HP có chính xác không
     @Test(priority = 3)
     public void TC03_search_03() throws InterruptedException {
@@ -81,15 +81,15 @@ public class TKUngTuyenTest {
     	page.ClickKQDangKy();
     	// Mở Dropdown list học kỳ chọn học kỳ 251
     	page.chonHK251();
-    	// Mở Dropdown list Ngành chọn ngành Công Nghệ Thông Tin
-    	page.chonNganhCNTT();
+    	// Mở Dropdown list Ngành chọn ngành Công Nghệ Thông Tin TH101
+    	page.chonNganh101();
     	// Nhập dữ liệu tìm kiếm Tên HP : "Nhập môn công nghệ thông tin"
     	page.fill("Nhập môn công nghệ thông tin");
     	// Kiểm tra hệ thống có hiển thị kết quả không và có đúng với TênHP "Nhập môn công nghệ thông tin"
     	page.checkTHP();
     	Thread.sleep(2000);
     } 
-    // ✅ TC04 - Hệ thống cho phép lọc HK251 ngành CNTT và tìm kiếm Lịch Học "Thứ Năm; Tiết 10 - 12; Tuần 3 - 12; Phòng CS3.F.12.05"
+    // ✅ TC04 - Hệ thống cho phép lọc HK251 ngành CNTT và tìm kiếm Lịch Học "Thứ Ba; Tiết 1 - 3; Tuần 2 - 11; Phòng CS3.F.03.06"
     // Mục Đích: Kiểm tra rằng hệ thống tìm kiếm Lịch Học có chính xác không
     @Test(priority = 4)
     public void TC04_search_04() throws InterruptedException {
@@ -98,14 +98,14 @@ public class TKUngTuyenTest {
     	// Mở Dropdown list học kỳ chọn học kỳ 251
     	page.chonHK251();
     	// Mở Dropdown list Ngành chọn ngành Công Nghệ Thông Tin
-    	page.chonNganhCNTT();
-    	// Nhập dữ liệu tìm kiếm Lịch Học : "Thứ Năm; Tiết 10 - 12; Tuần 3 - 12; Phòng CS3.F.12.05"
-    	page.fill("Thứ Năm; Tiết 10 - 12; Tuần 3 - 12; Phòng CS3.F.12.05");
-    	// Kiểm tra hệ thống có hiển thị kết quả không và có đúng với Lịch Học "Thứ Năm; Tiết 10 - 12; Tuần 3 - 12; Phòng CS3.F.12.05"
+    	page.chonNganh101();
+    	// Nhập dữ liệu tìm kiếm Lịch Học : "Thứ Ba; Tiết 1 - 3; Tuần 2 - 11; Phòng CS3.F.03.06"
+    	page.fill("Thứ Ba; Tiết 1 - 3; Tuần 2 - 11; Phòng CS3.F.03.06");
+    	// Kiểm tra hệ thống có hiển thị kết quả không và có đúng với Lịch Học "Thứ Ba; Tiết 1 - 3; Tuần 2 - 11; Phòng CS3.F.03.06"
     	page.checkLH();
     	Thread.sleep(2000);
     } 
-    // ✅ TC05 - Hệ thống cho phép lọc HK251 ngành CNTT và tìm kiếm Số TC "3"
+    // ✅ TC05 - Hệ thống cho phép lọc HK251 ngành CNTT TH101 và tìm kiếm Số TC "3"
     // Mục Đích: Kiểm tra rằng hệ thống tìm kiếm Số Tín Chỉ có chính xác không
     @Test(priority = 5)
     public void TC05_search_05() throws InterruptedException {
@@ -113,8 +113,8 @@ public class TKUngTuyenTest {
     	page.ClickKQDangKy();
     	// Mở Dropdown list học kỳ chọn học kỳ 251
     	page.chonHK251();
-    	// Mở Dropdown list Ngành chọn ngành Công Nghệ Thông Tin
-    	page.chonNganhCNTT();
+    	// Mở Dropdown list Ngành chọn ngành Công Nghệ Thông Tin TH101
+    	page.chonNganh101();
     	// Nhập dữ liệu tìm kiếm Số TC : "3"
     	page.fill("3");
     	// Kiểm tra hệ thống có hiển thị kết quả không và có đúng với Số TC "3"
@@ -122,7 +122,7 @@ public class TKUngTuyenTest {
     	Thread.sleep(2000);
     } 
     
-    // ✅ TC06 - Hệ thống cho phép lọc HK251 ngành CNTT và tìm kiếm Trạng Thái "Chưa phân công"
+    // ✅ TC06 - Hệ thống cho phép lọc HK251 ngành CNTT TH101 và tìm kiếm Trạng Thái "Chưa phân công"
     // Mục Đích: Kiểm tra rằng hệ thống tìm kiếm Trạng Thái có chính xác không
     @Test(priority = 6)
     public void TC06_search_06() throws InterruptedException {
@@ -131,7 +131,7 @@ public class TKUngTuyenTest {
     	// Mở Dropdown list học kỳ chọn học kỳ 251
     	page.chonHK251();
     	// Mở Dropdown list Ngành chọn ngành Công Nghệ Thông Tin
-    	page.chonNganhCNTT();
+    	page.chonNganh101();
     	// Nhập dữ liệu tìm kiếm Trạng Thái : "Chưa phân công"
     	page.fill("Chưa phân công");
     	// Kiểm tra hệ thống có hiển thị kết quả không và có đúng với Trạng Thái : "Chưa phân công"
