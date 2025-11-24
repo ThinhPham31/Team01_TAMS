@@ -176,6 +176,7 @@ public class AddTermPage {
 		return successfulText;
 	}
 	
+	
 	//Clear all input data
 	public void resetInputData() {
 		
