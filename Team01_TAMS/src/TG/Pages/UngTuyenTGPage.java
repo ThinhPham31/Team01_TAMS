@@ -2,6 +2,7 @@ package TG.Pages;
 
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;
+import org.testng.Assert;
 
 public class UngTuyenTGPage {
     private WebDriver driver;
@@ -21,7 +22,7 @@ public class UngTuyenTGPage {
     private By TroGiangButton = By.xpath("//*[@id=\"parent-trogiang\"]");
     private By DangKyButton = By.xpath("//*[@id=\"child-trogiang-apply\"]");
     private By ListNganh = By.xpath("/html/body/div[2]/main/section/div[2]/div/div/div[1]/div/div[2]/select");
-    private By ChonNganhDB = By.xpath("/html/body/div[2]/main/section/div[2]/div/div/div[1]/div/div[2]/select/option[6]");
+    private By ChonNganhDB = By.xpath("/html/body/div[2]/main/section/div[2]/div/div/div[1]/div/div[2]/select/option[5]");
     private By ChonNganhKhac = By.xpath("");
     private By UpdateButton = By.xpath("/html/body/div[2]/main/section/div[2]/div/div/div[2]/div[2]/div/div/div[2]/div/table/tbody/tr[1]/td[6]/span/a");
     private By DeletePhotoButton = By.xpath("/html/body/div[2]/main/div[2]/div/div/div[2]/div/div[10]/div/div/div/a/i");
@@ -31,7 +32,7 @@ public class UngTuyenTGPage {
     private By DongButton = By.id("btnClose");
     private By CancelsuccessMessage = By.id("swal2-title");
     private By ListHK = By.xpath("/html/body/div[2]/main/section/div[2]/div/div/div[1]/div/div[1]/select");
-    private By ChonHK = By.xpath("/html/body/div[2]/main/section/div[2]/div/div/div[1]/div/div[1]/select/option[98]");
+    private By ChonHK = By.xpath("/html/body/div[2]/main/section/div[2]/div/div/div[1]/div/div[1]/select/option[18]");
     
 
     public UngTuyenTGPage(WebDriver driver) {
@@ -40,59 +41,90 @@ public class UngTuyenTGPage {
 
     // ==== Actions ====
     
-    // Các thao tác mở form ứng tuyển ngành Đặc Biệt (HK251 Ngành CNTT TH102)
+    // Các thao tác mở form ứng tuyển ngành Đặc Biệt (HK251 Ngành CNTT TH101)
     public void openApplyFormNDB() throws InterruptedException {
+    	// Mở Dropdownlist trợ giảng
     	driver.findElement(TroGiangButton).click();
+    	// Chọn Dăng Ký để vào trang đăng ký trợ giảng
     	driver.findElement(DangKyButton).click();
     	Thread.sleep(2000);
+    	// Mở DropdownList Học Kỳ
     	driver.findElement(ListHK).click();
+    	// Chọn Học Kỳ 251
     	driver.findElement(ChonHK).click();
     	Thread.sleep(2000);
+    	// Mở DropdownList Ngành
     	driver.findElement(ListNganh).click();
+    	// Chọn Ngành CNTT TH101
     	driver.findElement(ChonNganhDB).click();
     	Thread.sleep(500);
+    	// Chọn Lưu Thông Tin
         driver.findElement(applyButton).click();
         Thread.sleep(1000);
     }
     
     // Các thao tác mở form ứng tuyển ngành khác
     public void openApplyFormNK() throws InterruptedException {
+    	// Mở Dropdownlist trợ giảng
     	driver.findElement(TroGiangButton).click();
+    	// Chọn Dăng Ký để vào trang đăng ký trợ giảng
     	driver.findElement(DangKyButton).click();
     	Thread.sleep(2000);
+    	// Mở DropdownList Học Kỳ
     	driver.findElement(ListHK).click();
+    	// Chọn Học Kỳ 251
     	driver.findElement(ChonHK).click();
     	Thread.sleep(2000);
+    	// Mở DropdownList Ngành
     	driver.findElement(ListNganh).click();
+    	// Chọn Ngành Khác
     	driver.findElement(ChonNganhKhac).click();
     	Thread.sleep(500);
+    	// Chọn Lưu Thông Tin
         driver.findElement(applyButton).click();
         Thread.sleep(1000);
     }
 
-    // Các thao tác mở Cập nhật ứng tuyển ngành Đặc Biệt (HK251 ngành CNTT TH102
+    // Các thao tác mở Cập nhật ứng tuyển ngành Đặc Biệt (HK251 ngành CNTT TH101
     public void updateApplyFormNDB() throws InterruptedException {
+    	// Mở DropdownList Trợ Giảng
     	driver.findElement(TroGiangButton).click();
+    	// Chọn Đăng Ký để vào trang đăng ký trợ giảng
     	driver.findElement(DangKyButton).click();
     	Thread.sleep(2000);
+    	// Mở DropdownList Học Kỳ
     	driver.findElement(ListHK).click();
+    	// Chọn Học Kỳ 251
     	driver.findElement(ChonHK).click();
     	Thread.sleep(2000);
+    	// Mở DropdownList Nganh
     	driver.findElement(ListNganh).click();
+    	// Chọn Ngành CNTT TH101
     	driver.findElement(ChonNganhDB).click();
     	Thread.sleep(500);
+    	// Chọn Lưu Thông Tin
         driver.findElement(UpdateButton).click();
         Thread.sleep(1000);
     }
     
     // Các thao tác mở Cập nhật form ứng tuyển ngành khác
     public void updateApplyFormNK() throws InterruptedException {
+    	// Mở DropdownList Trợ Giảng
     	driver.findElement(TroGiangButton).click();
+    	// Chọn Đăng Ký để vào trang đăng ký trợ giảng
     	driver.findElement(DangKyButton).click();
     	Thread.sleep(2000);
+    	// Mở DropdownList Học Kỳ
+    	driver.findElement(ListHK).click();
+    	// Chọn Học Kỳ 251
+    	driver.findElement(ChonHK).click();
+    	Thread.sleep(2000);
+    	// Mở DropdownList Nganh
     	driver.findElement(ListNganh).click();
+    	// Chọn Ngành Khác
     	driver.findElement(ChonNganhKhac).click();
     	Thread.sleep(500);
+    	// Chọn Lưu Thông Tin
         driver.findElement(UpdateButton).click();
         Thread.sleep(1000);
     }
@@ -118,7 +150,7 @@ public class UngTuyenTGPage {
     	} else {
     		System.out.println("Ứng Tuyển Thành Công không được hiển thị");
     	}
-        //return wait.until(ExpectedConditions.visibilityOfElementLocated(successMessage)).isDisplayed();
+    	
     }
 
     // Kiểm tra nếu có bất kì trường thông tin nào bỏ trống mà không hiện thông báo lỗi, với thông báo lỗi mong đợi được cấp ở UngTuyenTGTest và thông báp lỗi thực tế 
@@ -176,15 +208,21 @@ public class UngTuyenTGPage {
     // Kiểm tra thông báo Huỷ ứng tuyển thành công có được hiển thị
     public void CancelSuccessMessageDisplayed() throws InterruptedException {
     	Thread.sleep(500);
+    	boolean check = true;
     	if (driver.findElement(CancelsuccessMessage).isDisplayed()) {
     		System.out.println("Huỷ Ứng Tuyển Thành Công được hiển thị");
     	} else {
     		System.out.println("Huỷ Ứng Tuyển Thành Công không được hiển thị");
+    		// Nếu Thông báo ứng tuyển thành công  không được hiển thị thì chuyển check về false
+    		check = false;
     	}
+    	// So sánh nếu True Thì Pass False thì báo lỗi "Huỷ Ứng Tuyển Thành Công không được hiển thị"
+    	Assert.assertTrue(check,"Huỷ Ứng Tuyển Thành Công không được hiển thị");
     }
     
     // Nhấn chọn Cập nhật mở lại Cập nhật form ứng tuyển TG
-    public void ReUpdate() {
+    public void ReUpdate() throws InterruptedException {
     	driver.findElement(UpdateButton).click();
+    	Thread.sleep(2000);
     }
 }

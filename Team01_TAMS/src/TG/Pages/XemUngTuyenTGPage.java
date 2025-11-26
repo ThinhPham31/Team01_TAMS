@@ -14,10 +14,10 @@ public class XemUngTuyenTGPage {
 	private By TGButton = By.xpath("//*[@id=\"parent-trogiang\"]");
 	private By KQDangKy = By.xpath("//*[@id=\"child-trogiang-resultapply\"]");
 	private By HKButton = By.xpath("/html/body/div[2]/main/section/div[2]/div/div/div[1]/div/div[1]/select");
-	private By HK431Button= By.xpath("/html/body/div[2]/main/section/div[2]/div/div/div[1]/div/div[1]/select/option[1]");
-	private By HK251Button= By.xpath("/html/body/div[2]/main/section/div[2]/div/div/div[1]/div/div[1]/select/option[98]");
+	private By HK253Button= By.xpath("/html/body/div[2]/main/section/div[2]/div/div/div[1]/div/div[1]/select/option[1]");
+	private By HK251Button= By.xpath("/html/body/div[2]/main/section/div[2]/div/div/div[1]/div/div[1]/select/option[18]");
 	private By NganhButton = By.xpath("/html/body/div[2]/main/section/div[2]/div/div/div[1]/div/div[1]/select");
-	private By NganhCNTTth102 = By.xpath("/html/body/div[2]/main/section/div[2]/div/div/div[1]/div/div[2]/select/option[3]");
+	private By NganhCNTTth101 = By.xpath("/html/body/div[2]/main/section/div[2]/div/div/div[1]/div/div[2]/select/option[4]");
 	private By NganhCNTT = By.xpath("/html/body/div[2]/main/section/div[2]/div/div/div[1]/div/div[2]/select/option[8]");
 	private By NoData = By.xpath("/html/body/div[2]/main/section/div[2]/div/div/div[2]/div/div/div[2]/div/table/tbody/tr/td");
 	private By LHPxpath = By.xpath("/html/body/div[2]/main/section/div[2]/div/div/div[2]/div/div/div[2]/div/table/tbody/tr/td[1]");
@@ -50,16 +50,16 @@ public class XemUngTuyenTGPage {
     	driver.findElement(KQDangKy).click();
     	Thread.sleep(2000);
     }
-    // Chọn Học Kỳ 431
-    public void chonHK431() throws InterruptedException {
+    // Chọn Học Kỳ 253
+    public void chonHK253() throws InterruptedException {
     	driver.findElement(HKButton).click();
-    	driver.findElement(HK431Button).click();
+    	driver.findElement(HK253Button).click();
     	Thread.sleep(2000);
     }
-    // Chọn ngành CNTT TH102
-    public void chonNganh102() throws InterruptedException {
+    // Chọn ngành CNTT TH101
+    public void chonNganh101() throws InterruptedException {
     	driver.findElement(NganhButton).click();
-    	driver.findElement(NganhCNTTth102).click();
+    	driver.findElement(NganhCNTTth101).click();
     	Thread.sleep(2000);
     }
     // Chọn ngành CNTT
@@ -127,7 +127,7 @@ public class XemUngTuyenTGPage {
     
     public void checkInfo() throws InterruptedException {
     	// Kết quả mong đợi Mã LHP
-    	String expectedMLHP = "251_71ITBS10103_0201";
+    	String expectedMLHP = "251_71ITBS10103_01";
     	// Nếu Mã LHP được hiển thị thì
     	if (driver.findElement(MaLHP).isDisplayed()) {
     		// Lấy Mã LHP thực tế
@@ -157,7 +157,7 @@ public class XemUngTuyenTGPage {
     		
     	}
     	// Kết quả mong đợi Lịch Học
-    	String expectedLH = "Thứ Năm; Tiết 10 - 12; Tuần 3 - 12; Phòng CS3.F.12.05";
+    	String expectedLH = "Thứ Ba; Tiết 1 - 3; Tuần 2 - 11; Phòng CS3.F.03.06";
     	// Nếu Lịch Học được hiển thị thì
     	if (driver.findElement(LichHoc).isDisplayed()) {
     		// Lấy Lịch Học thực tế
@@ -207,7 +207,7 @@ public class XemUngTuyenTGPage {
     	driver.findElement(TimKiem).sendKeys(data);
     }
     
-    // Kiểm tra các mã Lớp Học Phần sau khi tìm kiếm có đúng với "251_71ITBS10103_0201"
+    // Kiểm tra các mã Lớp Học Phần sau khi tìm kiếm có đúng với "251_71ITBS10103_01"
     public void checkMLHP() throws InterruptedException {
     	// Tìm các phần tử phù hợp với xpath=LHPxpath và lưu thành một List lhpList
     	List<WebElement> lhpList = driver.findElements(LHPxpath);
@@ -229,14 +229,15 @@ public class XemUngTuyenTGPage {
     		//Tạo vòng lặp từng xét từng Mã LHP
     		for (WebElement lhp : lhpList) {
                 String text = lhp.getText().trim();
-                // Kiểm tra điều kiện nếu không chứa "251_71ITBS10103_0201"
-                if (!(text.contains("251_71ITBS10103_0201"))) {
+                // Kiểm tra điều kiện nếu không chứa "251_71ITBS10103_01"
+                if (!(text.contains("251_71ITBS10103_01"))) {
                 	// Chuyển đổi trạng tái filterCorrect về flase
                     filterCorrect = false;
+                    //Lệnh này kiểm tra nếu filterCorrect = True thì pass, filterCorrect = false sẽ báo lỗi "Tìm kiếm sai kết quả"
+            		Assert.assertTrue(filterCorrect, "Tìm kiếm sai kết quả");
                 }
             }
-    		//Lệnh này kiểm tra nếu filterCorrect = True thì pass, filterCorrect = false sẽ báo lỗi "Tìm kiếm sai kết quả"
-    		Assert.assertTrue(filterCorrect, "Tìm kiếm sai kết quả");
+    		
     		
     	}
     	
@@ -283,16 +284,16 @@ public class XemUngTuyenTGPage {
                 if (!(text.contains("Nhập môn công nghệ thông tin"))) {
                 	// Chuyển đổi trạng tái filterCorrect về flase
                     filterCorrect = false;
+                    //Lệnh này kiểm tra nếu filterCorrect = True thì pass, filterCorrect = false sẽ báo lỗi "Tìm kiếm sai kết quả"
+            		Assert.assertTrue(filterCorrect, "Tìm kiếm sai kết quả");
                 }
             }
-    		//Lệnh này kiểm tra nếu filterCorrect = True thì pass, filterCorrect = false sẽ báo lỗi "Tìm kiếm sai kết quả"
-    		Assert.assertTrue(filterCorrect, "Tìm kiếm sai kết quả");
     		
     	}
     	
     }
     
-    // Kiểm tra các Lịch Học sau khi tìm kiếm có đúng với "Thứ Năm; Tiết 10 - 12; Tuần 3 - 12; Phòng CS3.F.12.05"
+    // Kiểm tra các Lịch Học sau khi tìm kiếm có đúng với "Thứ Ba; Tiết 1 - 3; Tuần 2 - 11; Phòng CS3.F.03.06"
     public void checkLH() throws InterruptedException {
     	// Tìm các phần tử phù hợp với xpath=LHcolumn và lưu thành một List lhpList
     	List<WebElement> lhpList = driver.findElements(LHcolumn);
@@ -318,10 +319,11 @@ public class XemUngTuyenTGPage {
                 if (!(text.contains("Nhập môn công nghệ thông tin"))) {
                 	// Chuyển đổi trạng tái filterCorrect về flase
                     filterCorrect = false;
+                    //Lệnh này kiểm tra nếu filterCorrect = True thì pass, filterCorrect = false sẽ báo lỗi "Tìm kiếm sai kết quả"
+            		Assert.assertTrue(filterCorrect, "Tìm kiếm sai kết quả");
+            		
                 }
             }
-    		//Lệnh này kiểm tra nếu filterCorrect = True thì pass, filterCorrect = false sẽ báo lỗi "Tìm kiếm sai kết quả"
-    		Assert.assertTrue(filterCorrect, "Tìm kiếm sai kết quả");
     		
     	}
     	
@@ -353,10 +355,11 @@ public class XemUngTuyenTGPage {
                 if (!(text.contains("3"))) {
                 	// Chuyển đổi trạng tái filterCorrect về flase
                     filterCorrect = false;
+                    //Lệnh này kiểm tra nếu filterCorrect = True thì pass, filterCorrect = false sẽ báo lỗi "Tìm kiếm sai kết quả"
+            		Assert.assertTrue(filterCorrect, "Tìm kiếm sai kết quả");
+            		
                 }
             }
-    		//Lệnh này kiểm tra nếu filterCorrect = True thì pass, filterCorrect = false sẽ báo lỗi "Tìm kiếm sai kết quả"
-    		Assert.assertTrue(filterCorrect, "Tìm kiếm sai kết quả");
     		
     	}
     	
@@ -388,10 +391,10 @@ public class XemUngTuyenTGPage {
                 if (!(text.contains("Chưa phân công"))) {
                 	// Chuyển đổi trạng tái filterCorrect về flase
                     filterCorrect = false;
+                    //Lệnh này kiểm tra nếu filterCorrect = True thì pass, filterCorrect = false sẽ báo lỗi "Tìm kiếm sai kết quả"
+            		Assert.assertTrue(filterCorrect, "Tìm kiếm sai kết quả");
                 }
             }
-    		//Lệnh này kiểm tra nếu filterCorrect = True thì pass, filterCorrect = false sẽ báo lỗi "Tìm kiếm sai kết quả"
-    		Assert.assertTrue(filterCorrect, "Tìm kiếm sai kết quả");
     		
     	}
     	

@@ -13,7 +13,7 @@ public class HuyUngTuyenTGTest {
     private String filePath;
     private LoginTGPage login;
     
-  //Hàm này được gọi trước kkhi thực thi class này
+    //Hàm này được gọi trước kkhi thực thi class này
     //Mục đích là để chuẩn bị môi trường chạy  các TCs kiểm tra chức năng Ứng Tuyển Trợ Giảng
     @BeforeClass
     
@@ -52,7 +52,7 @@ public class HuyUngTuyenTGTest {
     	page.CancelbutNo();
     	// Đóng Form
     	page.CloseForm();
-    	Thread.sleep(2000);
+    	Thread.sleep(4000);
     	
     }
     
