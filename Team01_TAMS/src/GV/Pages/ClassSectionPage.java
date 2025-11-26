@@ -90,4 +90,9 @@ public class ClassSectionPage {
                 By.xpath(".//a[@title='Upload danh sách sinh viên' or @data-bs-original-title='Upload danh sách sinh viên']"));
         importIcon.click();
     }
+
+	public int getRowCount() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

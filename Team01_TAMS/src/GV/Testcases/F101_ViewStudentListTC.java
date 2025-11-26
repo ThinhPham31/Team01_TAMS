@@ -80,7 +80,12 @@ public class F101_ViewStudentListTC extends InitiationTest {
         );
     }
 
-    /*
+    private void setDriver(WebDriver driver2) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/*
      * Test Objective:
      *  - Xác nhận hệ thống hiển thị đúng danh sách lớp học phần.
      *  - Khi nhập Mã LHP vào ô Tìm kiếm → bảng chỉ hiển thị dòng tương ứng.
