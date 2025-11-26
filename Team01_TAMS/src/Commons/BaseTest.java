@@ -2,10 +2,12 @@ package Commons;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterTest;
 
 public class BaseTest {
     protected WebDriver driver;
+    protected WebDriverWait wait;
 
     // Gọi trong @BeforeTest của từng test class
     protected void setupDriver() {
