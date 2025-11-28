@@ -1,50 +1,33 @@
 package BCN.Pages;
 
+import Helpers.ValidateUIHelpers;
 import org.openqa.selenium.*;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
-import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.util.List;
 
 public class TaRemunerationPage {
 
     private WebDriver driver;
-    private WebDriverWait wait;
+    private ValidateUIHelpers helper;
 
-    // TODO: kiểm tra lại URL trang "Bảng Thống Kê Trợ Giảng"
     private static final String PAGE_URL =
             "https://cntttest.vanlanguni.edu.vn:18081/Ta2025/Statisticals/StatisticalRemuneration";
 
-    public TaRemunerationPage(WebDriver driver, WebDriverWait wait) {
-        this.driver = driver;
-        this.wait = wait;
-    }
-
     // ========== LOCATORS ==========
+    private By semesterSelect = By.id("hocky");
+    private By majorSelect    = By.id("nganh");
 
-    // Combobox Học kỳ & Ngành (thường giống id hocky / nganh ở các trang khác)
-    private By semesterSelect = By.id("hocky");   // <select id="hocky">
-    private By majorSelect    = By.id("nganh");   // <select id="nganh">
-
-    // Nút "Xuất"
-    private By exportButton = By.id("exportfile");
-    // Các dòng trong bảng danh sách trợ giảng
+    private By exportButton   = By.id("exportfile");
     private By tableRows      = By.cssSelector("table tbody tr");
 
-    // Header/breadcrumb để chắc chắn vào đúng trang
     private By pageTitle      = By.xpath("//*[contains(.,'Bảng Thống Kê Trợ Giảng')]");
 
-    // ========== HELPER ==========
 
-    private void pause(long ms) {
-        try {
-            Thread.sleep(ms);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-    }
-
-    private void pause5s() {
-        pause(5000);
+    // ========== CONSTRUCTOR ==========
+    public TaRemunerationPage(WebDriver driver, ValidateUIHelpers helper) {
+        this.driver = driver;
+        this.helper = helper;
     }
 
     // ========== ACTIONS ==========
@@ -52,47 +35,46 @@ public class TaRemunerationPage {
     // Mở trang thống kê thù lao
     public void openPage() {
         driver.get(PAGE_URL);
-        wait.until(ExpectedConditions.visibilityOfElementLocated(pageTitle));
-        pause5s();   // cho bạn nhìn màn hình
+        helper.waitForPageLoaded();
     }
 
-    // Chọn học kỳ (vd: "251")
+    // Chọn học kỳ
     public void selectSemester(String semesterText) {
-        WebElement el = wait.until(
-                ExpectedConditions.visibilityOfElementLocated(semesterSelect));
+        helper.waitForPageLoaded();
+        WebElement el = driver.findElement(semesterSelect);
         new Select(el).selectByVisibleText(semesterText);
-        pause5s();
+        helper.waitForPageLoaded();
     }
 
-    // Chọn ngành (vd: "Công Nghệ Th")
+    // Chọn ngành
     public void selectMajor(String majorText) {
-        WebElement el = wait.until(
-                ExpectedConditions.visibilityOfElementLocated(majorSelect));
+        helper.waitForPageLoaded();
+        WebElement el = driver.findElement(majorSelect);
         new Select(el).selectByVisibleText(majorText);
-        pause5s();
+        helper.waitForPageLoaded();
     }
 
-    // Đếm số dòng TA đang hiển thị trong bảng
+    // Đếm số dòng TA
     public int getTaRowCount() {
-        return driver.findElements(tableRows).size();
+        helper.waitForPageLoaded();
+        List<WebElement> rows = driver.findElements(tableRows);
+        return rows.size();
     }
 
-    // Click nút Xuất – giả sử sinh ra file excel / csv
+    // Click nút Xuất
     public void clickExport() {
-        WebElement btn = wait.until(
-                ExpectedConditions.elementToBeClickable(exportButton));
-        btn.click();
-        pause5s();  // cho bạn nhìn thấy popup download
+        helper.waitForPageLoaded();
+        driver.findElement(exportButton).click();
+        helper.waitForPageLoaded();
     }
 
-    // Kiểm tra trang đã load OK (có tiêu đề + bảng)
+    // Kiểm tra trang đã load OK
     public boolean isPageLoaded() {
-        try {
-            wait.until(ExpectedConditions.visibilityOfElementLocated(pageTitle));
-            wait.until(ExpectedConditions.visibilityOfElementLocated(tableRows));
-            return true;
-        } catch (TimeoutException e) {
-            return false;
-        }
+        helper.waitForPageLoaded();
+
+        boolean title = helper.verifyElementExist(pageTitle);
+        boolean hasRows = driver.findElements(tableRows).size() > 0;
+
+        return title && hasRows;
     }
 }

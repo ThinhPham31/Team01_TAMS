@@ -3,6 +3,7 @@ package GV.Testcases;
 import GV.Pages.*;
 import Commons.InitiationTest;
 import Helpers.ValidateUIHelpers;
+import Helpers.authenSupport;
 import Commons.WebUI;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.*;
@@ -13,22 +14,20 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import BCN.Pages.BcnUserListPage;
+
 /**
  * F1.0.1 – Xem danh sách sinh viên theo lớp học phần
  *  - Dùng để kiểm tra filter theo Mã LHP trên màn hình "Quản lý lớp học phần"
  */
 public class F101_ViewStudentListTC extends InitiationTest {
-
-    // Biến driver dùng cho riêng test này
-    private WebDriver driver;
-
     // Dùng để chờ trang tải xong (hàm waitForPageLoaded trong Helpers)
     private ValidateUIHelpers validateUIHelpers;
 
     // Các Page Object dùng chung
-    private GVLoginPage gvLoginPage;
     private GVDashboardPage gvDashboardPage;
     private ClassSectionPage classSectionPage;
+    private authenSupport auth;
 
     /**
      *  - Các bước:
@@ -38,52 +37,28 @@ public class F101_ViewStudentListTC extends InitiationTest {
      *      4. Chờ Dashboard load xong
      *      5. Click menu "Lớp học phần" để mở trang ClassSection
      *      6. Chờ bảng dữ liệu LHP hiển thị
+     * @throws InterruptedException 
      */
     @BeforeClass
-    public void setUp() {
+    public void loginAsGV() throws InterruptedException {
 
-        driver = getDriver();
-
-        // Nếu driver chưa được khởi tạo → tự khởi tạo mới
-        if (driver == null) {
-            WebDriverManager.chromedriver().setup();   // tải ChromeDriver tương thích version
-            driver = new ChromeDriver();               // mở instance Chrome
-            driver.manage().window().maximize();       // phóng to cửa sổ
-            setDriver(driver);                         // lưu lại driver vào InitiationTest
-        }
-
-        // Điều hướng tới trang login của hệ thống TA2025
-        driver.get("https://cntttest.vanlanguni.edu.vn:18081/Ta2025/Account/Login");
-
-        // Khởi tạo PageObject login
-        gvLoginPage = new GVLoginPage(driver);
-
-        // Gọi hàm loginWithGV:
-        //  - Nhập email + password
-        //  - Đợi user nhập mã Authentication
-        //  - Sau khi login thành công → trả về GVDashboardPage
-        gvDashboardPage = gvLoginPage.loginWithGV(
-                "thinh.2174802010519@vanlanguni.vn",
-                "VLU31032003"
-        );
-
-        // Chờ trang Dashboard load hoàn tất 
         validateUIHelpers = new ValidateUIHelpers(driver);
+
+        auth = new authenSupport(driver);
+        gvDashboardPage = auth.loginWithGV();
+
+        // Wait Page Loaded
         validateUIHelpers.waitForPageLoaded();
 
-        // Từ Dashboard → click menu "Lớp học phần"
-        classSectionPage = gvDashboardPage.clickClassSectionMenu();
+        // Tạo classSectionPage SAU khi click menu
+        gvDashboardPage.clickClassSectionMenu(validateUIHelpers);
 
-        // Đợi bảng chứa danh sách LHP hiển thị
-        new WebDriverWait(driver, 10).until(
-                ExpectedConditions.visibilityOfElementLocated(By.id("dataTableBasic"))
-        );
+        // Quan trọng: KHỞI TẠO ĐÚNG PAGE OBJECT
+        classSectionPage = new ClassSectionPage(driver, validateUIHelpers);
+
+        // Đợi bảng hiện
+        validateUIHelpers.waitForPageLoaded();
     }
-
-    private void setDriver(WebDriver driver2) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	/*
      * Test Objective:

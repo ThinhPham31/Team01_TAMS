@@ -1,6 +1,8 @@
 package GV.Pages;
 
 import Commons.WebUI;
+import Helpers.ValidateUIHelpers;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
@@ -10,6 +12,8 @@ import org.openqa.selenium.WebDriver;
  *  - Chứa các thao tác mở menu bên trái (Lớp học phần, Thời khóa biểu, Trợ giảng, ...)
  */
 public class GVDashboardPage {
+	
+	private ValidateUIHelpers helpers;
 
     private WebDriver driver;
 
@@ -18,6 +22,9 @@ public class GVDashboardPage {
     }
 
     // =============== LOCATORS MENU BÊN TRÁI ===============
+    
+    // Meunu "Trang Chủ"
+    private By menuHome = By.xpath("/html/body/div[2]/nav/div/div[1]/div[2]/div/div/div/ul/li[1]/a");
 
     // Menu "Lớp học phần"
     private By menuClassSection   = By.id("child-classsection-index");
@@ -40,9 +47,10 @@ public class GVDashboardPage {
      * Click menu "Lớp học phần" bên trái.
      *  → Trả về ClassSectionPage để testcase thao tác tiếp.
      */
-    public ClassSectionPage clickClassSectionMenu() {
-        WebUI.waitForElementClickable(driver, menuClassSection).click();
-        return new ClassSectionPage(driver);
+    public ClassSectionPage clickClassSectionMenu(ValidateUIHelpers helper) {
+        driver.findElement(menuClassSection).click();
+        helper.waitForPageLoaded();
+        return new ClassSectionPage(driver, helper);
     }
 
     /**

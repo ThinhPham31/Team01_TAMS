@@ -1,32 +1,38 @@
 package BCN.Testcases;
-
-import BCN.Pages.Login;
+import BCN.Pages.BcnDashboardPage;
+import BCN.Pages.TaRemunerationPage;
 import BCN.Pages.UpdateTaRegistrationPage;
 import Commons.BaseTest;
+import Commons.InitiationTest;
+import General.Pages.LoginPage;
+import Helpers.ValidateUIHelpers;
+import Helpers.authenSupport;
+
 import org.testng.Assert;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-public class UpdateTaRegistrationTest extends BaseTest {
+public class UpdateTaRegistrationTest extends InitiationTest {
 
-    private Login loginPage;
+    private LoginPage loginPage;
     private UpdateTaRegistrationPage taPage;
+    private ValidateUIHelpers helper;
+    private authenSupport auth;
+    private BcnDashboardPage bcnDashboardPage;
 
-    @BeforeTest
+    @BeforeClass
     public void loginAsBCN() {
-        // 1. Mở browser
-        setupDriver();
 
-        // 2. Khởi tạo page object
-        loginPage = new Login(driver, wait);
-        taPage    = new UpdateTaRegistrationPage(driver, wait);
+        // InitiationTest đã tạo driver đầy đủ
+    	helper = new ValidateUIHelpers(driver);
 
-        // 3. Login bằng tài khoản **BCN**
-        String email    = "tan.207ct68670@vanlanguni.vn";
-        String password = "VLU20102002";
-        loginPage.login(email, password);
+        // Login bằng tài khoản BCN
+        auth = new authenSupport(driver);
+        bcnDashboardPage = auth.loginWithBCN();
 
-        // 4. Sau khi login xong, mở trang “Danh Sách Sinh Viên Đăng Ký Trợ Giảng”
+        // Mở trang thống kê thù lao
+        taPage = new UpdateTaRegistrationPage(driver, helper);
         taPage.openPage();
     }
 

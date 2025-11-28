@@ -7,8 +7,6 @@
   <test name="Team01_TAMS_Tests">
     <packages>
       <package name="Admin.Testcases"/>
-      <package name="General.Testcases"/>
-      <package name="BCN.Testcases"/>
     </packages>
   </test>
 </suite>

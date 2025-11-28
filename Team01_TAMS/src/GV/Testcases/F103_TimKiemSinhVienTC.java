@@ -6,7 +6,9 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.*;
 import org.testng.annotations.*;
 
-import GV.Pages.GVLoginPage;
+import Commons.InitiationTest;
+import Helpers.ValidateUIHelpers;
+import Helpers.authenSupport;
 import GV.Pages.GVDashboardPage;
 import GV.Pages.ClassSectionPage;
 import GV.Pages.DiemDanhPopup;
@@ -15,43 +17,34 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 /**
  * F1.0.3 – Test chức năng Tìm kiếm sinh viên trong popup điểm danh.
  */
-public class F103_TimKiemSinhVienTC {
-
-    private WebDriver driver;
-    private GVLoginPage      loginPage;
-    private GVDashboardPage  dashboardPage;
+public class F103_TimKiemSinhVienTC extends InitiationTest {
+	private GVDashboardPage gvDashboardPage;
     private ClassSectionPage classSectionPage;
-    private DiemDanhPopup    diemDanhPopup;
+    private DiemDanhPopup diemDanhPopup;
+    private ValidateUIHelpers validateUIHelpers;
+    private authenSupport auth;
 
-    @BeforeTest
-    public void setUp() {
+    @BeforeClass
+    public void loginAsGV() throws InterruptedException {
 
-        WebDriverManager.chromedriver().setup();
-        driver = new ChromeDriver();
-        driver.manage().window().maximize();
+        // KHÔNG được khai báo lại WebDriver driver
+        // driver đã được tạo từ InitiationTest.initializeTestBaseSetup()
 
-        driver.get("https://cntttest.vanlanguni.edu.vn:18081/Ta2025/Account/Login");
+        validateUIHelpers = new ValidateUIHelpers(driver);
 
-        loginPage = new GVLoginPage(driver);
-        dashboardPage = loginPage.loginWithGV(
-                "thinh.2174802010519@vanlanguni.vn",
-                "VLU31032003"
-        );
+        // Login GV (OTP bạn nhập tay)
+        auth = new authenSupport(driver);
+        gvDashboardPage = auth.loginWithGV();
 
-        classSectionPage = dashboardPage.clickClassSectionMenu();
+        validateUIHelpers.waitForPageLoaded();
 
-        new WebDriverWait(driver, 10).until(
-                ExpectedConditions.visibilityOfElementLocated(By.id("dataTableBasic"))
-        );
+        // Mở menu Lớp học phần
+        gvDashboardPage.clickClassSectionMenu(validateUIHelpers);
 
-        classSectionPage.openDiemDanhPopup("251_71ITBS10103_0102");
+        // Khởi tạo ClassSectionPage
+        classSectionPage = new ClassSectionPage(driver, validateUIHelpers);
 
-        new WebDriverWait(driver, 10).until(
-                ExpectedConditions.visibilityOfElementLocated(By.id("diemdanhsv"))
-        );
-
-        diemDanhPopup = new DiemDanhPopup(driver);
-        diemDanhPopup.waitLoaded();
+        classSectionPage.waitForTableLoaded();
     }
 
     /**
@@ -62,6 +55,24 @@ public class F103_TimKiemSinhVienTC {
      */
     @Test(priority = 1)
     public void TC01_SearchStudentByName() {
+    	
+    	String maLHP = "251_71ITBS10103_0102";
+
+        // 1. Chọn filter
+        classSectionPage.selectHocKy("251");
+        classSectionPage.selectNganh("Công Nghệ Thông Tin_TH0102");
+
+        // 2. Tìm đúng lớp
+        classSectionPage.searchLHP(maLHP);
+
+        // 3. Mở popup điểm danh
+        classSectionPage.openDiemDanhPopup(maLHP);
+
+        // 4. Khởi tạo popup đúng cách
+        diemDanhPopup = new DiemDanhPopup(driver, validateUIHelpers);
+
+        // 5. Chờ popup load
+        diemDanhPopup.waitLoaded();
 
         // Từ khóa tìm kiếm (một phần họ tên)
         String keyword = "Nguyễn";
@@ -73,12 +84,5 @@ public class F103_TimKiemSinhVienTC {
         //   - Số dòng kết quả > 0
         //   - Mỗi dòng hiển thị chứa từ "Nguyễn" trong Họ tên
         // (Cài đặt chi tiết nằm trong DiemDanhPopup)
-    }
-
-    @AfterTest(alwaysRun = true)
-    public void tearDown() {
-        if (driver != null) {
-            driver.quit();
-        }
     }
 }

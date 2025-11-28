@@ -1,80 +1,88 @@
 package BCN.Testcases;
 
+import BCN.Pages.BcnDashboardPage;
 import BCN.Pages.BcnUserListPage;
-import BCN.Pages.Login;
+import BCN.Pages.UpdateTaRegistrationPage;
 import BCN.Pages.UpdateUserPage;
 import Commons.BaseTest;
+import Commons.InitiationTest;
+import General.Pages.LoginPage;
+import Helpers.ValidateUIHelpers;
+import Helpers.authenSupport;
+
 import org.testng.Assert;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-public class UpdateUserTest extends BaseTest {
+public class UpdateUserTest extends InitiationTest {
 
-    private Login loginPage;
-    private BcnUserListPage userListPage;
+	private LoginPage loginPage;
     private UpdateUserPage updateUserPage;
+    private authenSupport auth;
+    private BcnDashboardPage bcnDashboardPage;
+    private BcnUserListPage userListPage;
+    private ValidateUIHelpers helper;
+    
+    private static final String OLD_USER_CODE = "2174802010704";   // mã cũ cần update
+    private static final String NEW_USER_CODE = "2174802010704A";  // mã mới sau khi update
 
-    // Mã cũ và mã mới để test
-    private final String OLD_USER_CODE = "2174802010704";
-    private final String NEW_USER_CODE = "11122222";
 
-    @BeforeTest
+    @BeforeClass
     public void loginAsBCN() {
-        // 1. Mở browser, init driver + wait
-        setupDriver();
 
-        // 2. Khởi tạo các Page Object
-        loginPage      = new Login(driver, wait);
-        userListPage   = new BcnUserListPage(driver, wait);
-        updateUserPage = new UpdateUserPage(driver, wait);
+        // InitiationTest đã tạo driver đầy đủ
+    	helper = new ValidateUIHelpers(driver);
 
-        // 3. Login bằng tài khoản BCN
-        String email    = "tan.207ct68670@vanlanguni.vn";   // đổi lại nếu cần
-        String password = "VLU20102002";
-        loginPage.login(email, password);
+        // Login bằng tài khoản BCN
+        auth = new authenSupport(driver);
+        bcnDashboardPage = auth.loginWithBCN();
 
-        // 4. Vào màn "Người dùng"
+        // Mở trang cập nhật người dùng
+        userListPage = new BcnUserListPage(driver, helper);
         userListPage.open();
     }
 
     @Test
     public void updateUser_success_showToast_andChangeCode() {
 
-        // B1 – tìm user theo MÃ CŨ
+        helper = new ValidateUIHelpers(driver);
+
+        // 1. Mở danh sách người dùng trước
+        userListPage = new BcnUserListPage(driver, helper);
+        userListPage.open();
+
+        // 2. Tìm user theo mã cũ
         userListPage.searchUser(OLD_USER_CODE);
 
-        // B2 – mở form Cập nhật của dòng đầu tiên
+        // 3. Mở form cập nhật dòng đầu tiên
         userListPage.openEditFormFirstRow();
 
-        // B3 – đợi form hiển thị
+        // 4. Form UpdateUserPage hiển thị -> tạo object UpdateUserPage
+        updateUserPage = new UpdateUserPage(driver, helper);
         updateUserPage.waitForFormVisible();
 
-        // B4 – kiểm tra Email, Họ & Tên không cho sửa
-        Assert.assertFalse(updateUserPage.isEmailEnabled(),
-                "Email vẫn enable – yêu cầu là chỉ xem (readonly).");
-        Assert.assertFalse(updateUserPage.isFullNameEnabled(),
-                "Họ & Tên vẫn enable – yêu cầu là chỉ xem (readonly).");
+        // 5. Kiểm tra field readonly
+        Assert.assertFalse(updateUserPage.isEmailEnabled());
+        Assert.assertFalse(updateUserPage.isFullNameEnabled());
 
-        // B5 – cập nhật các field cho phép sửa (mỗi hàm bên Page đã sleep ~5s cho bạn nhìn)
-        updateUserPage.setCode(NEW_USER_CODE);                // đổi Mã
-        updateUserPage.setPhone("0912345678");                 // số điện thoại mới
-        updateUserPage.setBirthdayAnyDay();                    // chọn 1 ngày sinh bất kỳ
-        updateUserPage.setGender("Nam");                       // đúng text option Combobox
-        updateUserPage.setMajor("Công Nghệ Thông Tin");        // đúng text option Combobox
+        // 6. Cập nhật dữ liệu
+        updateUserPage.setCode(NEW_USER_CODE);
+        updateUserPage.setPhone("0912345678");
+        updateUserPage.setBirthdayAnyDay();
+        updateUserPage.setGender("Nam");
+        updateUserPage.setMajor("Công Nghệ Thông Tin");
 
-        // B6 – lưu thông tin
+        // 7. Lưu
         updateUserPage.clickSave();
 
-        // B7 – kiểm tra toast message
+        // 8. Kiểm tra toast
         String toast = updateUserPage.getToastText();
-        Assert.assertTrue(toast.contains("Đã cập nhật thông tin"),
-                "Không thấy toast 'Đã cập nhật thông tin'. Thực tế: " + toast);
+        Assert.assertTrue(toast.contains("Đã cập nhật thông tin"));
 
-        // B8 – verify lại trên danh sách: tìm theo MÃ MỚI phải ra 1 dòng
+        // 9. Tìm lại theo mã mới
         userListPage.searchUser(NEW_USER_CODE);
-        int count = userListPage.getUserCount();
-        Assert.assertEquals(count, 1,
-                "Sau khi đổi mã, tìm theo mã mới phải ra đúng 1 dòng, hiện tại count = " + count);
+        Assert.assertEquals(userListPage.getUserCount(), 1);
     }
 }
 

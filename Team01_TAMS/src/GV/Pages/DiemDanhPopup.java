@@ -1,86 +1,89 @@
 package GV.Pages;
 
 import org.openqa.selenium.*;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+import Helpers.ValidateUIHelpers;
 
 /**
  * DiemDanhPopup:
- *  - Đại diện cho popup/modal Điểm danh sinh viên trong LHP.
- *  - Cho phép:
- *      + Chờ modal load.
- *      + Tìm sinh viên bằng MSSV hoặc Họ tên.
- *      + Chọn trạng thái điểm danh.
- *      + Nhập ghi chú.
- *      + Lưu thông tin.
+ *  - Popup điểm danh sinh viên trong LHP
+ *  - Dùng ValidateUIHelpers để thao tác UI
  */
 public class DiemDanhPopup {
 
     private WebDriver driver;
+    private ValidateUIHelpers helper;
 
-    public DiemDanhPopup(WebDriver driver) {
+    public DiemDanhPopup(WebDriver driver, ValidateUIHelpers helper) {
         this.driver = driver;
+        this.helper = helper;
     }
 
-    // Root của modal Điểm danh 
-    private By modalRoot = By.id("diemdanhsv");
+    // ============== LOCATORS ==============
+    private By modalRoot          = By.id("diemdanhsv");
+    private By txtSearchStudent   = By.xpath("//div[@id='diemdanhsv']//input[@placeholder='Nhập từ khóa tìm kiếm...']");
+    private By btnSave            = By.id("btnSubmitDiemDanh");
 
-    // Ô tìm kiếm 
-    private By txtSearchStudent = By.xpath("//div[@id='diemdanhsv']//input[@placeholder='Nhập từ khóa tìm kiếm...']");
-
-    // Nút Lưu thông tin
-    private By btnSave = By.id("btnSubmitDiemDanh");
-
-    /**
-     * Đợi modal Điểm danh hiển thị đầy đủ.
-     */
-    public void waitLoaded() {
-        new WebDriverWait(driver, 10)
-                .until(ExpectedConditions.visibilityOfElementLocated(modalRoot));
-    }
-
-    /**
-     * Tìm sinh viên trong danh sách bằng từ khóa.
-     */
-    public void searchStudent(String keyword) {
-        WebElement searchBox = driver.findElement(txtSearchStudent);
-        searchBox.clear();
-        searchBox.sendKeys(keyword);
-    }
+    // ============== PRIVATE HELPERS ==============
 
     private WebElement getRowByMSSV(String mssv) {
-        String xpath = "//div[@id='diemdanhsv']//tr[.//span[contains(@class,'badge') and normalize-space()='" + mssv + "']]";
+        String xpath =
+                "//div[@id='diemdanhsv']//tr[" +
+                ".//span[contains(@class,'badge') and normalize-space()='" + mssv + "']" +
+                "]";
         return driver.findElement(By.xpath(xpath));
     }
 
+    // ============== PUBLIC ACTIONS ==============
+
     /**
-     * Chọn trạng thái điểm danh cho 1 sinh viên.
+     * Chờ popup điểm danh hiển thị
      */
-    public void selectStatus(String mssv, String statusText) {
-        WebElement row = getRowByMSSV(mssv);
-
-        // dropdown điểm danh (cột "Điểm danh")
-        WebElement ddlStatus = row.findElement(By.xpath(".//select"));
-
-        ddlStatus.click();
-        ddlStatus.findElement(By.xpath(".//option[normalize-space()='" + statusText + "']")).click();
+    public void waitLoaded() {
+        helper.verifyElementExist(modalRoot);
+        helper.waitForPageLoaded();
     }
 
     /**
-     * Nhập ghi chú cho sinh viên trong điểm danh.
+     * Tìm SV theo MSSV/Họ tên
+     */
+    public void searchStudent(String keyword) {
+        helper.setText(txtSearchStudent, keyword);
+        helper.waitForPageLoaded();
+    }
+
+    /**
+     * Chọn trạng thái điểm danh
+     */
+    public void selectStatus(String mssv, String statusText) {
+
+        WebElement row = getRowByMSSV(mssv);
+
+        WebElement ddl = row.findElement(By.xpath(".//select"));
+        ddl.click();
+
+        ddl.findElement(By.xpath(".//option[normalize-space()='" + statusText + "']")).click();
+
+        helper.waitForPageLoaded();
+    }
+
+    /**
+     * Nhập ghi chú
      */
     public void inputNote(String mssv, String note) {
         WebElement row = getRowByMSSV(mssv);
 
-        WebElement txtNote = row.findElement(By.xpath(".//textarea"));
-        txtNote.clear();
-        txtNote.sendKeys(note);
+        WebElement txt = row.findElement(By.xpath(".//textarea"));
+        txt.clear();
+        txt.sendKeys(note);
+
+        helper.waitForPageLoaded();
     }
 
     /**
-     * Click nút “Lưu thông tin” để lưu toàn bộ điểm danh của buổi học.
+     * Lưu điểm danh
      */
     public void clickSave() {
         driver.findElement(btnSave).click();
+        helper.waitForPageLoaded();
     }
 }

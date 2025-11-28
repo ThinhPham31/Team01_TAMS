@@ -6,53 +6,53 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.*;
 import org.testng.annotations.*;
 
-import GV.Pages.GVLoginPage;
+import Commons.InitiationTest;
 import GV.Pages.GVDashboardPage;
 import GV.Pages.ClassSectionPage;
+import GV.Pages.DiemDanhPopup;
 import GV.Pages.ImportPopup;
+import Helpers.ValidateUIHelpers;
+import Helpers.authenSupport;
 import io.github.bonigarcia.wdm.WebDriverManager;
 
 /**
  * F1.0.4 – Test chức năng Import danh sách sinh viên từ file Excel.
  */
-public class F104_ImportSinhVienTC {
-
-    private WebDriver driver;
-    private GVLoginPage      loginPage;
+public class F104_ImportSinhVienTC extends InitiationTest {
     private GVDashboardPage  dashboardPage;
     private ClassSectionPage classSectionPage;
-    private ImportPopup      importPopup;
+    private ImportPopup importPopup;
+    private DiemDanhPopup diemDanhPopup;
+    private ValidateUIHelpers validateUIHelpers;
+    private authenSupport auth;
+    private GVDashboardPage gvDashboardPage;
 
-    @BeforeTest
-    public void setUp() {
+    @BeforeClass
+    public void loginAsGV() throws InterruptedException {
 
-        WebDriverManager.chromedriver().setup();
-        driver = new ChromeDriver();
-        driver.manage().window().maximize();
+        // KHÔNG được khai báo lại WebDriver driver
+        // driver đã được tạo từ InitiationTest.initializeTestBaseSetup()
 
-        driver.get("https://cntttest.vanlanguni.edu.vn:18081/Ta2025/Account/Login");
+        validateUIHelpers = new ValidateUIHelpers(driver);
 
-        loginPage = new GVLoginPage(driver);
-        dashboardPage = loginPage.loginWithGV(
-                "thinh.2174802010519@vanlanguni.vn",
-                "VLU31032003"
-        );
+        // Login GV (OTP bạn nhập tay)
+        auth = new authenSupport(driver);
+        gvDashboardPage = auth.loginWithGV();
 
-        classSectionPage = dashboardPage.clickClassSectionMenu();
+        validateUIHelpers.waitForPageLoaded();
 
-        new WebDriverWait(driver, 10).until(
-                ExpectedConditions.visibilityOfElementLocated(By.id("dataTableBasic"))
-        );
+        // Mở menu Lớp học phần
+        gvDashboardPage.clickClassSectionMenu(validateUIHelpers);
 
-        // Mở popup Import cho lớp muốn test
-        classSectionPage.openImportPopup("251_71ITBS10103_0102");
-
-        new WebDriverWait(driver, 10).until(
-                ExpectedConditions.visibilityOfElementLocated(By.id("importsv"))
-        );
-
-        importPopup = new ImportPopup(driver);
-        importPopup.waitLoaded();
+        // Khởi tạo ClassSectionPage
+        classSectionPage = new ClassSectionPage(driver, validateUIHelpers);
+        importPopup = new ImportPopup(driver, validateUIHelpers);
+        
+        // Đợi bảng xuất hiện
+        classSectionPage.waitForTableLoaded();
+        
+        classSectionPage.selectHocKy("251");
+        classSectionPage.selectNganh("Công Nghệ Thông Tin_TH0102");
     }
 
     /**
@@ -63,25 +63,21 @@ public class F104_ImportSinhVienTC {
      */
     @Test(priority = 1)
     public void TC01_ImportStudentListSuccessfully() throws InterruptedException {
+    	
+    	// Đường dẫn file
+        String filePath = "D:\\251-KiemThuTuDong-01\\DS.xlsx";
 
-        // Đường dẫn file test 
-        String filePath = System.getProperty("DS.xlsx") + "D:\\HK1 25-26\\Kiemthutudong\\DS.xlsx";
+        // Mở popup ImportSV
+        importPopup.clickImportSV();
 
-        // Bước 1: Chọn file
+        // Upload file
         importPopup.uploadFile(filePath);
 
-        // Bước 2: Bấm nút "Import"
+        // Bấm Import
         importPopup.clickImport();
+        
+        importPopup.clickButtonCapNhat();
 
-        // Bước 3: Có thể chờ toast thành công
-        // importPopup.waitForSuccessToast();
         Thread.sleep(3000);
-    }
-
-    @AfterTest(alwaysRun = true)
-    public void tearDown() {
-        if (driver != null) {
-            driver.quit();
-        }
     }
 }

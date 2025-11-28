@@ -3,13 +3,14 @@
 <suite name="Failed suite [Default suite]" guice-stage="DEVELOPMENT">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="TG.Testcases.TKThongBaoTest">
+      <class name="GV.Testcases.F123_XoaThongBaoTC">
         <methods>
-          <include name="TC03_SearchND"/>
           <include name="tearDown"/>
-          <include name="setup"/>
+          <include name="initializeTestBaseSetup"/>
+          <include name="TC01_DeleteNotification"/>
+          <include name="setUp"/>
         </methods>
-      </class> <!-- TG.Testcases.TKThongBaoTest -->
+      </class> <!-- GV.Testcases.F123_XoaThongBaoTC -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->

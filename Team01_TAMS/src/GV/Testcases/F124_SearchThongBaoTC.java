@@ -4,37 +4,38 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.annotations.*;
 
-import GV.Pages.GVLoginPage;
+import Commons.InitiationTest;
 import GV.Pages.GVDashboardPage;
 import GV.Pages.NotificationArea;
+import Helpers.ValidateUIHelpers;
+import Helpers.authenSupport;
 import io.github.bonigarcia.wdm.WebDriverManager;
 
 /**
  * F1.2.4 – Test chức năng Tìm kiếm thông báo.
  */
-public class F124_SearchThongBaoTC {
+public class F124_SearchThongBaoTC extends InitiationTest {
 
-    private WebDriver        driver;
-    private GVLoginPage      loginPage;
-    private GVDashboardPage  dashboardPage;
+	private GVDashboardPage dashboardPage;
     private NotificationArea notificationArea;
+    private ValidateUIHelpers validateUIHelpers;
+    private authenSupport auth;
+    private GVDashboardPage gvDashboardPage;
 
-    @BeforeTest
-    public void setUp() {
+    @BeforeClass
+    public void setUp() throws InterruptedException {
 
-        WebDriverManager.chromedriver().setup();
-        driver = new ChromeDriver();
-        driver.manage().window().maximize();
+    	validateUIHelpers = new ValidateUIHelpers(driver);
 
-        driver.get("https://cntttest.vanlanguni.edu.vn:18081/Ta2025/Account/Login");
+        // Login GV (OTP bạn nhập tay)
+        auth = new authenSupport(driver);
+        gvDashboardPage = auth.loginWithGV();
 
-        loginPage = new GVLoginPage(driver);
-        dashboardPage = loginPage.loginWithGV(
-                "thinh.2174802010519@vanlanguni.vn",
-                "VLU31032003"
-        );
+        validateUIHelpers.waitForPageLoaded();
 
-        notificationArea = new NotificationArea(driver);
+        notificationArea = new NotificationArea(driver, validateUIHelpers);
+        
+        notificationArea.openNotificationDropdown();
     }
 
     /**
@@ -58,10 +59,4 @@ public class F124_SearchThongBaoTC {
         Thread.sleep(2000);
     }
 
-    @AfterTest(alwaysRun = true)
-    public void tearDown() {
-        if (driver != null) {
-            driver.quit();
-        }
-    }
 }

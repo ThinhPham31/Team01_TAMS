@@ -1,71 +1,64 @@
 package BCN.Pages;
 
+import Helpers.ValidateUIHelpers;
 import org.openqa.selenium.*;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class UpdateUserPage {
 
     private WebDriver driver;
-    private WebDriverWait wait;
+    private ValidateUIHelpers helper;
 
-    public UpdateUserPage(WebDriver driver, WebDriverWait wait) {
-        this.driver = driver;
-        this.wait = wait;
-    }
+    // URL trang cập nhật người dùng
+    private static final String PAGE_URL =
+            "https://cntttest.vanlanguni.edu.vn:18081/Ta2025/TeachingAssistant/Registered";
 
-    // ====== LOCATORS ======
-    // Thay vì tìm modal, mình đợi luôn các field trong form cho chắc
-    private By fullNameInput = By.id("edithoten");        // Họ & Tên (readonly)
-    private By emailInput    = By.id("editemail");        // Email (readonly)
+    // ===== LOCATORS =====
+    private By fullNameInput    = By.id("edithoten");
+    private By emailInput       = By.id("editemail");
 
-    private By phoneInput    = By.id("editdienthoai");    // Số điện thoại
-    private By birthdayInput = By.id("editngaysinh");     // ô nhập ngày sinh (flatpickr)
- // 1 ngày bất kỳ trong calendar đang mở (bỏ qua ngày tháng trước/sau)
-    private By anyDayInPicker = By.xpath(
-            "//div[contains(@class,'flatpickr-calendar') and contains(@class,'open')]" +
-            "//span[contains(@class,'flatpickr-day') " +
-            "       and not(contains(@class,'prevMonthDay')) " +
-            "       and not(contains(@class,'nextMonthDay'))]"
+    private By phoneInput       = By.id("editdienthoai");
+    private By birthdayInput    = By.id("editngaysinh");
+
+    private By anyDayInPicker   = By.xpath(
+            "//div[contains(@class,'flatpickr-calendar') and contains(@class,'open')]"
+          + "//span[contains(@class,'flatpickr-day') "
+          + "       and not(contains(@class,'prevMonthDay')) "
+          + "       and not(contains(@class,'nextMonthDay'))]"
     );
 
+    private By genderSelect     = By.id("editgioitinh");
+    private By majorSelect      = By.id("editnganh");
 
-    private By genderSelect  = By.id("editgioitinh");     // Giới tính
-    private By majorSelect   = By.id("editnganh");        // Ngành
+    private By saveButton       = By.xpath("//button[contains(.,'Lưu thông tin')]");
+    private By toastMessage     = By.cssSelector(".toast-body");
 
-    private By saveButton    = By.xpath("//button[contains(.,'Lưu thông tin')]");
-    private By toastMessage  = By.cssSelector(".toast-body");
-    private By codeInput = By.id("editma"); 
+    private By codeInput        = By.id("editma");
 
-    // ====== helper pause 5s (cho em dễ quan sát) ======
-    private void pause5s() {
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
+
+    // ===== CONSTRUCTOR =====
+    public UpdateUserPage(WebDriver driver, ValidateUIHelpers helper) {
+        this.driver = driver;
+        this.helper = helper;
     }
 
-    // ====== PUBLIC ACTIONS ======
 
-    // Đợi form cập nhật visible
+    // ===== ACTIONS =====
+
     public void waitForFormVisible() {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(fullNameInput));
-        wait.until(ExpectedConditions.visibilityOfElementLocated(emailInput));
-        pause5s();
+        helper.waitForPageLoaded();
+        helper.verifyElementExist(fullNameInput);
+        helper.verifyElementExist(emailInput);
     }
+
     public void setCode(String code) {
-        WebElement codeField = wait.until(ExpectedConditions
-                .elementToBeClickable(codeInput));
+        helper.waitForPageLoaded();
+        WebElement codeField = driver.findElement(codeInput);
         codeField.clear();
-        pause5s();           // cho bạn nhìn thấy rõ hơn
         codeField.sendKeys(code);
-        pause5s();
     }
 
-
-    // Kiểm tra 2 field không cho sửa
+    // readonly fields
     public boolean isEmailEnabled() {
         return driver.findElement(emailInput).isEnabled();
     }
@@ -74,55 +67,56 @@ public class UpdateUserPage {
         return driver.findElement(fullNameInput).isEnabled();
     }
 
-    // SĐT
+    // phone
     public void setPhone(String phone) {
-        WebElement el = wait.until(ExpectedConditions.elementToBeClickable(phoneInput));
+        helper.waitForPageLoaded();
+        WebElement el = driver.findElement(phoneInput);
         el.clear();
         el.sendKeys(phone);
-        pause5s();
+        helper.waitForPageLoaded();
     }
 
-    // Ngày sinh – chọn 1 ngày bất kì trong datepicker
+    // birthday – chọn 1 ngày bất kỳ
     public void setBirthdayAnyDay() {
-        // mở datepicker
-        WebElement input = wait.until(ExpectedConditions.elementToBeClickable(birthdayInput));
-        input.click();
-        // cho UI có thời gian render calendar
-        pause5s();
+        helper.waitForPageLoaded();
 
-        // chọn 1 ngày bất kỳ trong tháng (ở đây là ngày đầu tiên nó tìm được,
-        // nếu muốn đúng ngày 8 thì dùng XPath khác, mình ghi bên dưới)
-        WebElement day = wait.until(ExpectedConditions.elementToBeClickable(anyDayInPicker));
+        WebElement input = driver.findElement(birthdayInput);
+        input.click();
+
+        helper.waitForPageLoaded();
+
+        WebElement day = driver.findElement(anyDayInPicker);
         day.click();
 
-        pause5s();
+        helper.waitForPageLoaded();
     }
 
-
-    // Giới tính
+    // gender
     public void setGender(String genderText) {
-        WebElement el = wait.until(ExpectedConditions.visibilityOfElementLocated(genderSelect));
+        helper.waitForPageLoaded();
+        WebElement el = driver.findElement(genderSelect);
         new Select(el).selectByVisibleText(genderText);
-        pause5s();
+        helper.waitForPageLoaded();
     }
 
-    // Ngành
+    // major
     public void setMajor(String majorText) {
-        WebElement el = wait.until(ExpectedConditions.visibilityOfElementLocated(majorSelect));
+        helper.waitForPageLoaded();
+        WebElement el = driver.findElement(majorSelect);
         new Select(el).selectByVisibleText(majorText);
-        pause5s();
+        helper.waitForPageLoaded();
     }
 
-    // Lưu
+    // save
     public void clickSave() {
-        wait.until(ExpectedConditions.elementToBeClickable(saveButton)).click();
+        helper.waitForPageLoaded();
+        driver.findElement(saveButton).click();
+        helper.waitForPageLoaded();
     }
 
-    // Đọc nội dung toast
+    // toast
     public String getToastText() {
-        WebElement toast = wait.until(ExpectedConditions.visibilityOfElementLocated(toastMessage));
-        String text = toast.getText();
-        pause5s();
-        return text;
+        helper.waitForPageLoaded();
+        return driver.findElement(toastMessage).getText().trim();
     }
 }

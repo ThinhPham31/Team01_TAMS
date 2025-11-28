@@ -1,53 +1,79 @@
 package GV.Pages;
 
 import org.openqa.selenium.*;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+import Helpers.ValidateUIHelpers;
 
-/**
- * ImportPopup:
- *  - Đại diện cho popup Import danh sách sinh viên của LHP.
- *  - Gồm:
- *      + Input chọn file Excel.
- *      + Nút Import.
- */
 public class ImportPopup {
 
     private WebDriver driver;
+    private ValidateUIHelpers helper;
 
-    public ImportPopup(WebDriver driver) {
+    public ImportPopup(WebDriver driver, ValidateUIHelpers helper) {
         this.driver = driver;
+        this.helper = helper;
     }
 
-    // Root modal Import
+    // ===== LOCATORS =====
     private By modalRoot = By.id("importsv");
-
-    // Input file 
     private By inputFile = By.id("fileImportDssv");
-
-    // Nút Import
     private By btnImport = By.id("btnSubmitImport");
+    private By importSV = By.xpath("//*[@id=\"btnimportsv-6855\"]/span/i");
+    private By buttonCapNhat = By.xpath("/html/body/div[6]/div/div[6]/button[1]");
 
+    // ===== ACTIONS =====
+    
     /**
-     * Đợi modal Import hiển thị.
+     * Click nút ImportSV để mở popup Import sinh viên
+     */
+    public void clickButtonCapNhat() {
+        helper.waitForPageLoaded();
+
+        WebElement btn = driver.findElement(buttonCapNhat);
+        btn.click();
+        // sau khi click, popup phải hiển thị
+        waitLoaded();
+    }
+    
+    /**
+     * Click nút ImportSV để mở popup Import sinh viên
+     */
+    public void clickImportSV() {
+        helper.waitForPageLoaded();
+
+        WebElement btn = driver.findElement(importSV);
+        btn.click();
+
+        // sau khi click, popup phải hiển thị
+        waitLoaded();
+    }
+
+    
+    /**
+     * Đợi popup Import hiển thị
      */
     public void waitLoaded() {
-        new WebDriverWait(driver, 10)
-                .until(ExpectedConditions.visibilityOfElementLocated(modalRoot));
+        helper.verifyElementExist(modalRoot);
+        helper.waitForPageLoaded();
     }
 
     /**
-     * Upload file Excel chứa danh sách sinh viên.
+     * Upload file Excel
      */
     public void uploadFile(String filePath) {
+        helper.waitForPageLoaded();
+
         WebElement fileInput = driver.findElement(inputFile);
-        fileInput.sendKeys(filePath); // Selenium sẽ tự chọn file này
+        fileInput.sendKeys(filePath);
+
+        helper.waitForPageLoaded();
     }
 
     /**
-     * Click nút Import để gửi file lên hệ thống.
+     * Click nút Import
      */
     public void clickImport() {
+        helper.waitForPageLoaded();
         driver.findElement(btnImport).click();
+        helper.waitForPageLoaded();
     }
 }
